@@ -35,7 +35,7 @@ jobs:
       # Optional: upload test reports even when tests fail
       - name: Upload Surefire reports
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: surefire-reports
           path: |
