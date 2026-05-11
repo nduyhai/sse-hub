@@ -1,0 +1,40 @@
+flowchart LR
+    subgraph Clients
+        Browser[Browser / Web App]
+    end
+
+    subgraph InternalServices[Internal Microservices]
+        Order[Order Service]
+        Auth[Auth Service]
+        Debt[Debt Reminder Service]
+        Other[Other Services]
+    end
+
+    subgraph SseHub[sse-hub Spring Boot Modulith]
+        API[Notification API Module]
+        Core[Notification Core Module]
+        SSE[SSE Delivery Module]
+        RedisAdapter[Redis Adapter Module]
+        Analytics[Analytics Module]
+
+        API --> Core
+        Core -->|Spring Modulith Event| RedisAdapter
+        Core -->|Spring Modulith Event| Analytics
+        RedisAdapter --> SSE
+    end
+
+    subgraph Redis[Redis]
+        PubSub[Redis Pub/Sub Channels]
+    end
+
+    Browser -->|GET /api/v1/sse/subscribe| SSE
+
+    Order -->|POST /api/v1/notifications| API
+    Auth -->|POST /api/v1/notifications| API
+    Debt -->|POST /api/v1/notifications| API
+    Other -->|POST /api/v1/notifications| API
+
+    RedisAdapter -->|Publish Event| PubSub
+    PubSub -->|Subscribe Event| RedisAdapter
+
+    SSE -->|SSE Event Stream| Browser
