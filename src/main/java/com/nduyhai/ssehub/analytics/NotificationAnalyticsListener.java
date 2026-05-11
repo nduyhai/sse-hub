@@ -3,6 +3,7 @@ package com.nduyhai.ssehub.analytics;
 import com.nduyhai.ssehub.shared.event.NotificationCreatedEvent;
 import com.nduyhai.ssehub.shared.event.NotificationDeliveredEvent;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,9 @@ class NotificationAnalyticsListener {
         event.type());
   }
 
-  @ApplicationModuleListener
+  // @EventListener (not @ApplicationModuleListener) because NotificationDeliveredEvent is
+  // published from SseDispatcher outside a transaction — @TransactionalEventListener would drop it.
+  @EventListener
   void onNotificationDelivered(NotificationDeliveredEvent event) {
     log.info(
         "analytics event=notification_delivered notificationId={} userId={} deliveredAt={}",

@@ -6,11 +6,9 @@ import java.util.Optional;
 
 public interface NotificationRepository {
 
-    Notification save(Notification notification);
+  Notification save(Notification notification);
 
-    Optional<Notification> findByNotificationId(String notificationId);
+  Optional<Notification> findByNotificationId(String notificationId);
 
-    List<Notification> findByStatus(NotificationStatus status);
-
-    List<Notification> findPendingOlderThan(Instant threshold);
+  List<Notification> findPendingOlderThan(Instant threshold);
 }

@@ -18,7 +18,9 @@ class SseController {
     private final SseConnectionService connectionService;
 
     @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    Flux<ServerSentEvent<?>> subscribe(@RequestParam String userId) {
-        return connectionService.connect(userId);
+    Flux<ServerSentEvent<?>> subscribe(
+        @RequestParam String userId,
+        @RequestParam(required = false) String deviceId) {
+        return connectionService.connect(userId, deviceId);
     }
 }
