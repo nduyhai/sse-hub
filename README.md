@@ -65,9 +65,9 @@ sequenceDiagram
     participant RedisSubscriber
     participant SseDispatcher
 
-    Browser->>SseController: GET /api/v1/sse/subscribe?userId=U1
-    SseController->>SseRegistry: register(userId=U1)
-    SseRegistry-->>SseController: SseEmitter
+    Browser->>SseController: GET /api/v1/sse/subscribe?userId=U1&deviceId=D1
+    SseController->>SseRegistry: subscribe(userId=U1, deviceId=D1)
+    SseRegistry-->>SseController: Flux<ServerSentEvent>
     SseController-->>Browser: event: connected
 
     OrderService->>NotificationAPI: POST /api/v1/notifications
@@ -106,7 +106,7 @@ Module boundaries are enforced by Spring Modulith. The `redis` module may only r
 | Modularity | Spring Modulith 2.0.6 |
 | Persistence | Spring Data JPA, PostgreSQL 16, Flyway |
 | Messaging | Redis Pub/Sub (`spring-boot-starter-data-redis`) |
-| Distributed Lock | ShedLock 6.9.1 with Redis provider |
+| Distributed Lock | ShedLock 7.7.0 with Redis provider |
 | Containers | Docker Compose (auto-managed by Spring Boot) |
 
 ## API Reference
@@ -114,11 +114,18 @@ Module boundaries are enforced by Spring Modulith. The `redis` module may only r
 ### Subscribe to notifications
 
 ```
-GET /api/v1/sse/subscribe?userId={userId}
+GET /api/v1/sse/subscribe?userId={userId}[&deviceId={deviceId}]
 Accept: text/event-stream
 ```
 
 Returns a persistent SSE stream. The first event is `connected`. The server sends `heartbeat` events every 30 seconds to keep the connection alive.
+
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `userId` | Yes | The user to receive notifications for |
+| `deviceId` | No | Stable identifier for the client device or tab. If omitted, a UUID is assigned automatically. Use the same `deviceId` on reconnect to replace the previous connection for that device |
+
+A single user may hold multiple concurrent connections with different `deviceId` values (e.g. mobile app + desktop browser). Each connection receives all notifications independently.
 
 ### Send a notification
 
