@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.Instant;
 import lombok.Getter;
 import lombok.Setter;
+import org.jspecify.annotations.Nullable;
 
 @Entity
 @Table(name = "notifications")
@@ -24,6 +25,7 @@ public class Notification {
   @Column(nullable = false, columnDefinition = "TEXT")
   private String message;
 
+  @Nullable
   @Column(length = 100)
   private String type;
 
@@ -34,6 +36,7 @@ public class Notification {
   @Column(name = "created_at", nullable = false)
   private Instant createdAt;
 
+  @Nullable
   @Column(name = "delivered_at")
   private Instant deliveredAt;
 

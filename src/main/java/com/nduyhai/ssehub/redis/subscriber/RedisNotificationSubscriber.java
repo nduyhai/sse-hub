@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,7 +20,7 @@ public class RedisNotificationSubscriber implements MessageListener {
     private final ObjectMapper objectMapper;
 
     @Override
-    public void onMessage(Message message, byte[] pattern) {
+    public void onMessage(Message message, @Nullable byte[] pattern) {
         String channel = new String(message.getChannel());
         String userId = channel.replace(RedisConfig.CHANNEL_PREFIX, "");
 

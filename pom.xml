@@ -101,6 +101,13 @@
             <version>${shedlock.version}</version>
         </dependency>
 
+        <!-- Null safety -->
+        <dependency>
+            <groupId>org.jspecify</groupId>
+            <artifactId>jspecify</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <!-- Utilities -->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>

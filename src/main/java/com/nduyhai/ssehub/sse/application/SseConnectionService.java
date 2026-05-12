@@ -5,6 +5,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.codec.ServerSentEvent;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
@@ -17,7 +18,7 @@ public class SseConnectionService {
     private final SseSessionRegistry registry;
     private final SseHeartbeatService heartbeatService;
 
-    public Flux<ServerSentEvent<?>> connect(String userId, String deviceId) {
+    public Flux<ServerSentEvent<?>> connect(String userId, @Nullable String deviceId) {
         String resolvedDeviceId = StringUtils.hasText(deviceId) ? deviceId : UUID.randomUUID().toString();
         log.info("SSE connection established userId={} deviceId={}", userId, resolvedDeviceId);
 

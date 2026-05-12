@@ -2,6 +2,7 @@ package com.nduyhai.ssehub.sse.api;
 
 import com.nduyhai.ssehub.sse.application.SseConnectionService;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,7 @@ class SseController {
     @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     Flux<ServerSentEvent<?>> subscribe(
         @RequestParam String userId,
-        @RequestParam(required = false) String deviceId) {
+        @RequestParam(required = false) @Nullable String deviceId) {
         return connectionService.connect(userId, deviceId);
     }
 }
